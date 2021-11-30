@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AntDesign from "react-native-vector-icons/AntDesign";
+
+import firebase from "./src/services/firebaseConfig";
 import Login from "./src/screens/Login";
 import SignUp from "./src/screens/SignUp";
 import HomeTasks from "./src/screens/Home";
 import Profile from "./src/screens/Profile";
 import EditTask from "./src/screens/EditTask";
-import firebase from "./src/services/firebaseConfig";
 import AddTask from "./src/screens/AddTask";
-import { LogBox } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import AnimatedLoad from "./src/components/AnimatedLoad";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
@@ -109,62 +111,65 @@ export default function App(props) {
     }
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                {loggedUser ? (
+        <>
+            <AnimatedLoad />
+            <NavigationContainer>
+                <Stack.Navigator>
+                    {loggedUser ? (
+                        <Stack.Screen
+                            name="Home"
+                            component={HomeTabs}
+                            options={{
+                                headerShown: false,
+                                headerLeft: () => {
+                                    return null;
+                                },
+                            }}
+                        />
+                    ) : (
+                        <>
+                            <Stack.Screen
+                                name="Login"
+                                component={Login}
+                                options={{ headerShown: false }}
+                            />
+
+                            <Stack.Screen
+                                name="SignUp"
+                                component={SignUp}
+                                options={{ headerShown: false }}
+                            />
+                        </>
+                    )}
                     <Stack.Screen
-                        name="Home"
-                        component={HomeTabs}
+                        name="EditTask"
                         options={{
-                            headerShown: false,
-                            headerLeft: () => {
-                                return null;
+                            headerStyle: {
+                                backgroundColor: "#17181f",
+                                elevation: 0,
                             },
+                            headerTintColor: "#fff",
+                            title: "Editar tarea",
                         }}
-                    />
-                ) : (
-                    <>
-                        <Stack.Screen
-                            name="Login"
-                            component={Login}
-                            options={{ headerShown: false }}
-                        />
+                    >
+                        {(props) => <EditTask task={task} setTask={setTask} />}
+                    </Stack.Screen>
 
-                        <Stack.Screen
-                            name="SignUp"
-                            component={SignUp}
-                            options={{ headerShown: false }}
-                        />
-                    </>
-                )}
-                <Stack.Screen
-                    name="EditTask"
-                    options={{
-                        headerStyle: {
-                            backgroundColor: "#17181f",
-                            elevation: 0,
-                        },
-                        headerTintColor: "#fff",
-                        title: "Editar tarea",
-                    }}
-                >
-                    {(props) => <EditTask task={task} setTask={setTask} />}
-                </Stack.Screen>
-
-                <Stack.Screen
-                    name="AddTask"
-                    options={{
-                        headerStyle: {
-                            backgroundColor: "#17181f",
-                            elevation: 0,
-                        },
-                        headerTintColor: "#fff",
-                        title: "Añadir Tarea",
-                    }}
-                >
-                    {(props) => <AddTask task={task} setTask={setTask} />}
-                </Stack.Screen>
-            </Stack.Navigator>
-        </NavigationContainer>
+                    <Stack.Screen
+                        name="AddTask"
+                        options={{
+                            headerStyle: {
+                                backgroundColor: "#17181f",
+                                elevation: 0,
+                            },
+                            headerTintColor: "#fff",
+                            title: "Añadir Tarea",
+                        }}
+                    >
+                        {(props) => <AddTask task={task} setTask={setTask} />}
+                    </Stack.Screen>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </>
     );
 }
