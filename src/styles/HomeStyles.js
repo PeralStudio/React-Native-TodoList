@@ -98,4 +98,16 @@ export const styles = StyleSheet.create({
         borderColor: "#1976d2",
         borderRadius: 4,
     },
+    line: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: "90%",
+        alignSelf: "center",
+    },
+    emptyText: {
+        fontSize: 20,
+        color: "#83827D",
+        marginTop: 20,
+    },
 });

@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
     inputSection: {
         backgroundColor: "#17181f",
         paddingVertical: 15,
+        alignItems: "center",
     },
     inputContainer: {
         width: "90%",
@@ -16,6 +17,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "#17181f",
         borderWidth: 0.2,
         borderColor: "#fff",
+        marginTop: 10,
     },
     iconStyle: {
         height: "100%",
