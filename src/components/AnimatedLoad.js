@@ -15,18 +15,24 @@ export default function AnimatedLoad() {
             setButtonDisable(false);
         }, 2500);
 
-        const chargeAd = async () => {
-            await AdMobInterstitial.setAdUnitID(
-                "ca-app-pub-3940256099942544/1033173712"
-            ); // Test ID, Replace with your-admob-unit-id
-            await AdMobInterstitial.requestAdAsync({
-                servePersonalizedAds: true,
-            });
-        };
-        chargeAd();
+        // const chargeAd = async () => {
+        //     await AdMobInterstitial.setAdUnitID(
+        //         "ca-app-pub-6203383529182342/2460925112"
+        //     );
+        //     await AdMobInterstitial.requestAdAsync({
+        //         servePersonalizedAds: true,
+        //     });
+        // };
+        // chargeAd();
     }, []);
 
     const showAd = async () => {
+        await AdMobInterstitial.setAdUnitID(
+            "ca-app-pub-6203383529182342/2460925112"
+        );
+        await AdMobInterstitial.requestAdAsync({
+            servePersonalizedAds: true,
+        });
         await AdMobInterstitial.showAdAsync();
     };
 
