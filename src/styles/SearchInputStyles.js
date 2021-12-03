@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "#17181f",
         borderWidth: 0.2,
         borderColor: "#fff",
-        marginTop: 10,
+        marginBottom: 10,
     },
     iconStyle: {
         height: "100%",
@@ -40,5 +40,8 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 8,
         borderWidth: 1,
+    },
+    adContainer: {
+        marginBottom: -15,
     },
 });
