@@ -95,11 +95,13 @@ const Home = ({ task, setTask }) => {
         <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#17181f" />
 
-            <SearchInput
-                onChangeTextSearch={(s) => setSearch(s)}
-                valueSearch={search}
-            />
-            {taskFilter.length === 0 && (
+            {taskFilter.length > 0 && (
+                <SearchInput
+                    onChangeTextSearch={(s) => setSearch(s)}
+                    valueSearch={search}
+                />
+            )}
+            {taskFilter.length <= 0 && (
                 <View style={styles.line}>
                     <AntDesign name="frown" size={100} color="#83827D" />
                     <Text style={styles.emptyText}>No tienes tareas</Text>
