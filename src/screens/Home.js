@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     StatusBar,
     Alert,
+    Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import firebase from "../services/firebaseConfig";
@@ -12,6 +13,8 @@ import Task from "../components/Task";
 import SearchInput from "../components/SearchInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { styles } from "../styles/HomeStyles";
+import { AdMobBanner } from "expo-ads-admob";
+import { Image } from "react-native-elements";
 
 const Home = ({ task, setTask }) => {
     const [search, setSearch] = useState("");
@@ -96,6 +99,22 @@ const Home = ({ task, setTask }) => {
                 onChangeTextSearch={(s) => setSearch(s)}
                 valueSearch={search}
             />
+            {taskFilter.length === 0 && (
+                <View style={styles.line}>
+                    <AntDesign name="frown" size={100} color="#83827D" />
+                    <Text style={styles.emptyText}>No tienes tareas</Text>
+
+                    <Image
+                        source={require("../../assets/arrow-down.gif")}
+                        containerStyle={{
+                            width: 100,
+                            height: 100,
+                            position: "absolute",
+                            top: "140%",
+                        }}
+                    />
+                </View>
+            )}
 
             <FlatList
                 showsVerticalScrollIndicator={false}
