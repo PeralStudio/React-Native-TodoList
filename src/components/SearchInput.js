@@ -8,12 +8,6 @@ import { AdMobBanner } from "expo-ads-admob";
 const SearchInput = ({ valueSearch, onChangeTextSearch }) => {
     return (
         <View style={styles.inputSection}>
-            <AdMobBanner
-                bannerSize="banner"
-                adUnitID="ca-app-pub-6203383529182342/1753513956"
-                servePersonalizedAds={true}
-                onDidFailToReceiveAdWithError={(error) => console.log(error)}
-            />
             <View style={styles.inputContainer}>
                 <View style={styles.iconStyle}>
                     <AntDesign name="search1" size={16} color="#858585" />
@@ -25,6 +19,16 @@ const SearchInput = ({ valueSearch, onChangeTextSearch }) => {
                     onChangeText={onChangeTextSearch}
                     placeholder="Buscar tarea"
                     placeholderTextColor="#858585"
+                />
+            </View>
+            <View style={styles.adContainer}>
+                <AdMobBanner
+                    bannerSize="banner"
+                    adUnitID="ca-app-pub-6203383529182342/1753513956"
+                    servePersonalizedAds={true}
+                    onDidFailToReceiveAdWithError={(error) =>
+                        console.log(error)
+                    }
                 />
             </View>
         </View>
