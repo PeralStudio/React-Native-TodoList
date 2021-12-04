@@ -79,6 +79,7 @@ export default function App(props) {
                             backgroundColor: "#202128",
                             borderTopColor: "transparent",
                         },
+                        tabBarActiveBackgroundColor: "rgba(183,56,254,0.1)",
                     }}
                 >
                     {(props) => <HomeTasks task={task} setTask={setTask} />}
@@ -103,9 +104,11 @@ export default function App(props) {
                             backgroundColor: "#202128",
                             borderTopColor: "transparent",
                         },
+                        tabBarActiveBackgroundColor: "rgba(183,56,254,0.1)",
                     }}
-                    component={Profile}
-                />
+                >
+                    {(props) => <Profile task={task} />}
+                </Tab.Screen>
             </Tab.Navigator>
         );
     }
