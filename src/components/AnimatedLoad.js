@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { AdMobInterstitial } from "expo-ads-admob";
@@ -14,16 +14,6 @@ export default function AnimatedLoad() {
         setInterval(() => {
             setButtonDisable(false);
         }, 2500);
-
-        // const chargeAd = async () => {
-        //     await AdMobInterstitial.setAdUnitID(
-        //         "ca-app-pub-6203383529182342/2460925112"
-        //     );
-        //     await AdMobInterstitial.requestAdAsync({
-        //         servePersonalizedAds: true,
-        //     });
-        // };
-        // chargeAd();
     }, []);
 
     const showAd = async () => {
