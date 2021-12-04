@@ -5,22 +5,23 @@ import { styles } from "../styles/SearchInputStyles";
 
 import { AdMobBanner } from "expo-ads-admob";
 
-const SearchInput = ({ valueSearch, onChangeTextSearch }) => {
+const SearchInput = ({ valueSearch, onChangeTextSearch, taskFilter }) => {
     return (
         <View style={styles.inputSection}>
-            <View style={styles.inputContainer}>
-                <View style={styles.iconStyle}>
-                    <AntDesign name="search1" size={16} color="#858585" />
+            {taskFilter.length > 0 && (
+                <View style={styles.inputContainer}>
+                    <View style={styles.iconStyle}>
+                        <AntDesign name="search1" size={16} color="#858585" />
+                    </View>
+                    <TextInput
+                        style={styles.input}
+                        value={valueSearch}
+                        onChangeText={onChangeTextSearch}
+                        placeholder="Buscar tarea"
+                        placeholderTextColor="#858585"
+                    />
                 </View>
-
-                <TextInput
-                    style={styles.input}
-                    value={valueSearch}
-                    onChangeText={onChangeTextSearch}
-                    placeholder="Buscar tarea"
-                    placeholderTextColor="#858585"
-                />
-            </View>
+            )}
             <View style={styles.adContainer}>
                 <AdMobBanner
                     bannerSize="banner"
