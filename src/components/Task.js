@@ -13,14 +13,15 @@ const Task = ({
     onPressStatus,
 }) => {
     function getstyle(status) {
-        if (status === "Pendiente") {
-            return { backgroundColor: "#ffc300", color: "#000" };
-        } else if (status === "En Curso") {
-            return { backgroundColor: "#0466c8", color: "#fff" };
-        } else if (status === "Finalizada") {
-            return { backgroundColor: "#2a9134", color: "#fff" };
-        } else {
-            return { backgroundColor: "#c1121f", color: "#fff" };
+        switch (status) {
+            case "Pendiente":
+                return { backgroundColor: "#ffc300", color: "#000" };
+            case "En Curso":
+                return { backgroundColor: "#0466c8", color: "#fff" };
+            case "Finalizada":
+                return { backgroundColor: "#2a9134", color: "#fff" };
+            default:
+                return { backgroundColor: "#c1121f", color: "#fff" };
         }
     }
 
