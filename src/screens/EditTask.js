@@ -9,6 +9,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { styles } from "../styles/EditTaskStyles";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { AdMobBanner } from "expo-ads-admob";
 
 const EditTask = ({ task, setTask }) => {
     const route = useRoute();
@@ -34,6 +35,16 @@ const EditTask = ({ task, setTask }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.adContainer}>
+                <AdMobBanner
+                    bannerSize="banner"
+                    adUnitID="ca-app-pub-6203383529182342/7249329314"
+                    servePersonalizedAds={true}
+                    onDidFailToReceiveAdWithError={(error) =>
+                        console.log(error)
+                    }
+                />
+            </View>
             <StatusBar barStyle="light-content" backgroundColor="#17181f" />
 
             <Text style={styles.label}>Título</Text>
