@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     View,
     FlatList,
@@ -6,20 +6,21 @@ import {
     StatusBar,
     Alert,
     Text,
+    ToastAndroid,
 } from "react-native";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useFocusEffect } from "@react-navigation/core";
 import firebase from "../services/firebaseConfig";
 import Task from "../components/Task";
 import SearchInput from "../components/SearchInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { styles } from "../styles/HomeStyles";
-import { AdMobBanner } from "expo-ads-admob";
 import { Image } from "react-native-elements";
 
 const Home = ({ task, setTask }) => {
     const [search, setSearch] = useState("");
     const [loggedUser, setLoggedUser] = useState(null);
     const [taskFilter, setTaskFilter] = useState([]);
+    const [taskFilterStatus, setTaskFilterStatus] = useState([]);
 
     const navigation = useNavigation();
 
@@ -27,12 +28,33 @@ const Home = ({ task, setTask }) => {
         setLoggedUser(firebaseUser);
     });
 
+    useFocusEffect(
+        useCallback(() => {
+            const tasksFilter = task.filter(
+                (task) => task.userEmail === loggedUser?.email
+            );
+            setTaskFilter(tasksFilter);
+        }, [task, loggedUser, taskFilterStatus])
+    );
+
+    const pending = task.filter((item) => item.status === "Pendiente");
+    const inProgress = task.filter((item) => item.status === "En Curso");
+    const finished = task.filter((item) => item.status === "Finalizada");
+    const canceled = task.filter((item) => item.status === "Cancelada");
+
     useEffect(() => {
-        const tasksFilter = task.filter(
-            (task) => task.userEmail === loggedUser?.email
-        );
-        setTaskFilter(tasksFilter);
-    }, [task, loggedUser]);
+        if (taskFilterStatus.length > 0) {
+            const tasksFilter = taskFilterStatus.filter(
+                (task) => task.userEmail === loggedUser?.email
+            );
+            setTaskFilter(tasksFilter);
+        } else {
+            const tasksFilter = task.filter(
+                (task) => task.userEmail === loggedUser?.email
+            );
+            setTaskFilter(tasksFilter);
+        }
+    }, [task, loggedUser, taskFilterStatus]);
 
     function deleteTask(id) {
         const taskFilter = task.filter((element) => element.id !== id);
@@ -91,15 +113,151 @@ const Home = ({ task, setTask }) => {
             : null;
     };
 
+    const handleOnPressPending = (pending, setTaskFilterStatus) => {
+        if (pending.length <= 0) {
+            ToastAndroid.show(
+                "No tienes tareas Pendientes",
+                ToastAndroid.SHORT
+            );
+        } else if (pending.length > 0) {
+            setTaskFilterStatus(pending);
+        } else {
+            setTaskFilterStatus(task);
+        }
+    };
+    const handleOnPressInProgress = (inProgress, setTaskFilterStatus) => {
+        if (inProgress.length <= 0) {
+            ToastAndroid.show("No tienes tareas en curso", ToastAndroid.SHORT);
+        } else if (inProgress.length > 0) {
+            setTaskFilterStatus(inProgress);
+        } else {
+            setTaskFilterStatus(task);
+        }
+    };
+    const handleOnPressFinished = (finished, setTaskFilterStatus) => {
+        if (finished.length <= 0) {
+            ToastAndroid.show(
+                "No tienes tareas finalizadas",
+                ToastAndroid.SHORT
+            );
+        } else if (finished.length > 0) {
+            setTaskFilterStatus(finished);
+        } else {
+            setTaskFilterStatus(task);
+        }
+    };
+    const handleOnPressCanceled = (canceled, setTaskFilterStatus) => {
+        if (canceled.length <= 0) {
+            ToastAndroid.show(
+                "No tienes tareas canceladas",
+                ToastAndroid.SHORT
+            );
+        } else if (canceled.length > 0) {
+            setTaskFilterStatus(canceled);
+        } else {
+            setTaskFilterStatus(task);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#17181f" />
-
+            <SearchInput
+                onChangeTextSearch={(s) => setSearch(s)}
+                valueSearch={search}
+                taskFilter={taskFilter}
+            />
             {taskFilter.length > 0 && (
-                <SearchInput
-                    onChangeTextSearch={(s) => setSearch(s)}
-                    valueSearch={search}
-                />
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={() =>
+                            handleOnPressPending(pending, setTaskFilterStatus)
+                        }
+                    >
+                        <Text
+                            style={{
+                                backgroundColor: "#ffc300",
+                                color: "#000",
+                                padding: 5,
+                                marginRight: 5,
+                                borderRadius: 4,
+                                fontSize: 12.2,
+                            }}
+                        >
+                            Pendiente
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() =>
+                            handleOnPressInProgress(
+                                inProgress,
+                                setTaskFilterStatus
+                            )
+                        }
+                    >
+                        <Text
+                            style={{
+                                backgroundColor: "#0466c8",
+                                color: "#fff",
+                                padding: 5,
+                                marginRight: 5,
+                                borderRadius: 4,
+                                fontSize: 12.2,
+                            }}
+                        >
+                            En Curso
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() =>
+                            handleOnPressFinished(finished, setTaskFilterStatus)
+                        }
+                    >
+                        <Text
+                            style={{
+                                backgroundColor: "#2a9134",
+                                color: "#fff",
+                                padding: 5,
+                                marginRight: 5,
+                                borderRadius: 4,
+                                fontSize: 12.2,
+                            }}
+                        >
+                            Finalizada
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() =>
+                            handleOnPressCanceled(canceled, setTaskFilterStatus)
+                        }
+                    >
+                        <Text
+                            style={{
+                                backgroundColor: "#c1121f",
+                                color: "#fff",
+                                padding: 5,
+                                borderRadius: 4,
+                                marginRight: 5,
+                                fontSize: 12.2,
+                            }}
+                        >
+                            Cancelada
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setTaskFilterStatus(task)}>
+                        <Text
+                            style={{
+                                backgroundColor: "white",
+                                color: "black",
+                                padding: 5,
+                                borderRadius: 4,
+                                fontSize: 12.2,
+                            }}
+                        >
+                            Todas
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             )}
             {taskFilter.length <= 0 && (
                 <View style={styles.line}>
