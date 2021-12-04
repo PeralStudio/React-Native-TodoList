@@ -110,4 +110,11 @@ export const styles = StyleSheet.create({
         color: "#83827D",
         marginTop: 20,
     },
+    buttonContainer: {
+        alignSelf: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        margin: 0,
+        marginTop: -10,
+    },
 });
