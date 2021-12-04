@@ -5,7 +5,11 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#17181f",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
+        // paddingTop: 40,
+    },
+    adContainer: {
+        paddingBottom: 20,
     },
     label: {
         width: "90%",
