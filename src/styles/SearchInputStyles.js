@@ -42,6 +42,6 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
     },
     adContainer: {
-        marginBottom: -15,
+        marginBottom: 5,
     },
 });
