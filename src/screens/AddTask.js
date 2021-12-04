@@ -12,6 +12,7 @@ import { styles } from "../styles/AddTaskStyles";
 import AlertError from "../components/AlertError";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
+import { AdMobBanner } from "expo-ads-admob";
 
 const AddTask = ({ task, setTask }) => {
     const [description, setDescription] = useState("");
@@ -49,6 +50,16 @@ const AddTask = ({ task, setTask }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.adContainer}>
+                <AdMobBanner
+                    bannerSize="banner"
+                    adUnitID="ca-app-pub-6203383529182342/7249329314"
+                    servePersonalizedAds={true}
+                    onDidFailToReceiveAdWithError={(error) =>
+                        console.log(error)
+                    }
+                />
+            </View>
             <StatusBar barStyle="light-content" backgroundColor="#17181f" />
 
             <Text style={styles.label}>Título</Text>
@@ -110,12 +121,12 @@ const AddTask = ({ task, setTask }) => {
             >
                 <Text style={styles.iconButton}>AÑADIR</Text>
             </TouchableOpacity>
-            {error ? (
+            {error && (
                 <AlertError
                     error={error}
                     onPressCloseError={() => setError(null)}
                 />
-            ) : null}
+            )}
         </View>
     );
 };
