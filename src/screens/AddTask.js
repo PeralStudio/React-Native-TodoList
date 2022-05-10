@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -54,12 +54,12 @@ const AddTask = ({ task, setTask }) => {
                 <AdMobBanner
                     bannerSize="banner"
                     adUnitID="ca-app-pub-6203383529182342/7249329314"
-                    servePersonalizedAds={true}
                     onDidFailToReceiveAdWithError={(error) =>
-                        console.log(error)
+                        console.log("Admob error:", error)
                     }
                 />
             </View>
+
             <StatusBar barStyle="light-content" backgroundColor="#17181f" />
 
             <Text style={styles.label}>Título</Text>
@@ -112,7 +112,6 @@ const AddTask = ({ task, setTask }) => {
                     />
                 </Picker>
             </View>
-
             <TouchableOpacity
                 style={styles.buttonNewTask}
                 onPress={() => {

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
 import firebase, { auth } from "../services/firebaseConfig";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { styles } from "../styles/ProfileStyles";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function Profile({ task }) {
     const [loggedUser, setLoggedUser] = useState(null);
+    const [taskFilter, setTaskFilter] = useState([]);
 
     const navigation = useNavigation();
 
@@ -14,16 +15,33 @@ export default function Profile({ task }) {
         setLoggedUser(firebaseUser);
     });
 
+    useFocusEffect(
+        useCallback(() => {
+            const tasksFilter = task.filter(
+                (task) => task.userEmail === loggedUser?.email
+            );
+            setTaskFilter(tasksFilter);
+        }, [task, loggedUser])
+    );
+
     const handleSignOut = () => {
         auth.signOut().then(() => {
             navigation.navigate("Login");
         });
     };
 
-    const taskPending = task.filter((task) => task.status === "Pendiente");
-    const taskInProgress = task.filter((task) => task.status === "En Curso");
-    const taskFinished = task.filter((task) => task.status === "Finalizada");
-    const taskCanceled = task.filter((task) => task.status === "Cancelada");
+    const taskPending = taskFilter.filter(
+        (task) => task.status === "Pendiente"
+    );
+    const taskInProgress = taskFilter.filter(
+        (task) => task.status === "En Curso"
+    );
+    const taskFinished = taskFilter.filter(
+        (task) => task.status === "Finalizada"
+    );
+    const taskCanceled = taskFilter.filter(
+        (task) => task.status === "Cancelada"
+    );
 
     return (
         <View style={styles.container}>

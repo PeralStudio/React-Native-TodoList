@@ -85,12 +85,14 @@ const Login = () => {
                 onPress={handleSignIn}
                 style={styles.buttonContainer}
             >
-                <Text style={styles.buttonTitle}>ENTRAR</Text>
+                <Text style={styles.buttonTitle}>
+                    {loading === true ? (
+                        <ActivityIndicator size="large" color="#fff" />
+                    ) : (
+                        "ENTRAR"
+                    )}
+                </Text>
             </TouchableOpacity>
-
-            {loading === true ? (
-                <ActivityIndicator size="large" color="#fff" />
-            ) : null}
 
             <TouchableOpacity
                 onPress={() => navigation.navigate("SignUp")}

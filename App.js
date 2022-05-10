@@ -5,6 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import { NativeBaseProvider } from "native-base";
+import { Root } from "react-native-popup-confirm-toast";
 
 import firebase from "./src/services/firebaseConfig";
 import Login from "./src/screens/Login";
@@ -15,7 +17,10 @@ import EditTask from "./src/screens/EditTask";
 import AddTask from "./src/screens/AddTask";
 import AnimatedLoad from "./src/components/AnimatedLoad";
 
-LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs([
+    "Setting a timer",
+    "VirtualizedLists should never be nested",
+]);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -115,64 +120,72 @@ export default function App(props) {
 
     return (
         <>
-            <AnimatedLoad />
-            <NavigationContainer>
-                <Stack.Navigator>
-                    {loggedUser ? (
-                        <Stack.Screen
-                            name="Home"
-                            component={HomeTabs}
-                            options={{
-                                headerShown: false,
-                                headerLeft: () => {
-                                    return null;
-                                },
-                            }}
-                        />
-                    ) : (
-                        <>
+            <NativeBaseProvider>
+                <Root>
+                    <AnimatedLoad />
+                    <NavigationContainer>
+                        <Stack.Navigator>
+                            {loggedUser ? (
+                                <Stack.Screen
+                                    name="Home"
+                                    component={HomeTabs}
+                                    options={{
+                                        headerShown: false,
+                                        headerLeft: () => {
+                                            return null;
+                                        },
+                                    }}
+                                />
+                            ) : (
+                                <>
+                                    <Stack.Screen
+                                        name="Login"
+                                        component={Login}
+                                        options={{ headerShown: false }}
+                                    />
+
+                                    <Stack.Screen
+                                        name="SignUp"
+                                        component={SignUp}
+                                        options={{ headerShown: false }}
+                                    />
+                                </>
+                            )}
                             <Stack.Screen
-                                name="Login"
-                                component={Login}
-                                options={{ headerShown: false }}
-                            />
+                                name="EditTask"
+                                options={{
+                                    headerStyle: {
+                                        backgroundColor: "#17181f",
+                                        elevation: 0,
+                                    },
+                                    headerTintColor: "#fff",
+                                    title: "Editar tarea",
+                                }}
+                            >
+                                {(props) => (
+                                    <EditTask task={task} setTask={setTask} />
+                                )}
+                            </Stack.Screen>
 
                             <Stack.Screen
-                                name="SignUp"
-                                component={SignUp}
-                                options={{ headerShown: false }}
-                            />
-                        </>
-                    )}
-                    <Stack.Screen
-                        name="EditTask"
-                        options={{
-                            headerStyle: {
-                                backgroundColor: "#17181f",
-                                elevation: 0,
-                            },
-                            headerTintColor: "#fff",
-                            title: "Editar tarea",
-                        }}
-                    >
-                        {(props) => <EditTask task={task} setTask={setTask} />}
-                    </Stack.Screen>
-
-                    <Stack.Screen
-                        name="AddTask"
-                        options={{
-                            headerStyle: {
-                                backgroundColor: "#17181f",
-                                elevation: 0,
-                            },
-                            headerTintColor: "#fff",
-                            title: "Añadir Tarea",
-                        }}
-                    >
-                        {(props) => <AddTask task={task} setTask={setTask} />}
-                    </Stack.Screen>
-                </Stack.Navigator>
-            </NavigationContainer>
+                                name="AddTask"
+                                options={{
+                                    headerStyle: {
+                                        backgroundColor: "#17181f",
+                                        elevation: 0,
+                                    },
+                                    headerTintColor: "#fff",
+                                    title: "Añadir Tarea",
+                                }}
+                            >
+                                {(props) => (
+                                    <AddTask task={task} setTask={setTask} />
+                                )}
+                            </Stack.Screen>
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </Root>
+            </NativeBaseProvider>
         </>
     );
 }

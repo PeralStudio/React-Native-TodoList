@@ -114,7 +114,7 @@ export const styles = StyleSheet.create({
         alignSelf: "center",
         justifyContent: "center",
         flexDirection: "row",
-        margin: 0,
+        marginBottom: 5,
         marginTop: -10,
     },
 });

@@ -4,9 +4,9 @@ import {
     FlatList,
     TouchableOpacity,
     StatusBar,
-    Alert,
     Text,
-    ToastAndroid,
+    ScrollView,
+    Alert,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/core";
 import firebase from "../services/firebaseConfig";
@@ -15,6 +15,12 @@ import SearchInput from "../components/SearchInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { styles } from "../styles/HomeStyles";
 import { Image } from "react-native-elements";
+import { useToast } from "native-base";
+import { Popup } from "react-native-popup-confirm-toast";
+
+const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const Home = ({ task, setTask }) => {
     const [search, setSearch] = useState("");
@@ -23,6 +29,7 @@ const Home = ({ task, setTask }) => {
     const [taskFilterStatus, setTaskFilterStatus] = useState([]);
 
     const navigation = useNavigation();
+    const toast = useToast();
 
     firebase.auth().onAuthStateChanged((firebaseUser) => {
         setLoggedUser(firebaseUser);
@@ -115,10 +122,13 @@ const Home = ({ task, setTask }) => {
 
     const handleOnPressPending = (pending, setTaskFilterStatus) => {
         if (pending.length <= 0) {
-            ToastAndroid.show(
-                "No tienes tareas Pendientes",
-                ToastAndroid.SHORT
-            );
+            toast.show({
+                title: "No hay tareas pendientes",
+                duration: 2000,
+                placement: "bottom",
+                isClosable: false,
+                backgroundColor: "#51017f",
+            });
         } else if (pending.length > 0) {
             setTaskFilterStatus(pending);
         } else {
@@ -127,7 +137,13 @@ const Home = ({ task, setTask }) => {
     };
     const handleOnPressInProgress = (inProgress, setTaskFilterStatus) => {
         if (inProgress.length <= 0) {
-            ToastAndroid.show("No tienes tareas en curso", ToastAndroid.SHORT);
+            toast.show({
+                title: "No hay tareas en curso",
+                duration: 2000,
+                placement: "bottom",
+                isClosable: false,
+                backgroundColor: "#51017f",
+            });
         } else if (inProgress.length > 0) {
             setTaskFilterStatus(inProgress);
         } else {
@@ -136,10 +152,13 @@ const Home = ({ task, setTask }) => {
     };
     const handleOnPressFinished = (finished, setTaskFilterStatus) => {
         if (finished.length <= 0) {
-            ToastAndroid.show(
-                "No tienes tareas finalizadas",
-                ToastAndroid.SHORT
-            );
+            toast.show({
+                title: "No hay tareas finalizadas",
+                duration: 2000,
+                placement: "bottom",
+                isClosable: false,
+                backgroundColor: "#51017f",
+            });
         } else if (finished.length > 0) {
             setTaskFilterStatus(finished);
         } else {
@@ -148,10 +167,13 @@ const Home = ({ task, setTask }) => {
     };
     const handleOnPressCanceled = (canceled, setTaskFilterStatus) => {
         if (canceled.length <= 0) {
-            ToastAndroid.show(
-                "No tienes tareas canceladas",
-                ToastAndroid.SHORT
-            );
+            toast.show({
+                title: "No hay tareas canceladas",
+                duration: 2000,
+                placement: "bottom",
+                isClosable: false,
+                backgroundColor: "#51017f",
+            });
         } else if (canceled.length > 0) {
             setTaskFilterStatus(canceled);
         } else {
@@ -275,64 +297,79 @@ const Home = ({ task, setTask }) => {
                     />
                 </View>
             )}
-
-            <FlatList
-                showsVerticalScrollIndicator={false}
-                data={taskSearch}
-                renderItem={({ item }) => {
-                    return (
-                        <View
-                            onPress={() =>
-                                navigation.navigate("Login", {
-                                    id: item.id,
-                                    description: item.description,
-                                    title: item.title,
-                                    responsible: item.responsible,
-                                })
-                            }
-                        >
-                            <Task
-                                title={item.title}
-                                status={item.status}
-                                description={item.description}
-                                responsible={item.responsible}
-                                onPressDelete={() => {
-                                    Alert.alert(
-                                        "Estas seguro que quiere borrar esta tarea",
-                                        `${item.title}`,
-                                        [
-                                            {
-                                                text: "Cancelar",
-                                                onPress: () =>
-                                                    console.log(
-                                                        "Cancel Pressed"
-                                                    ),
-                                                style: "cancel",
-                                            },
-                                            {
-                                                text: "SI",
-                                                onPress: () =>
-                                                    deleteTask(item.id),
-                                            },
-                                        ],
-                                        { cancelable: false }
-                                    );
-                                }}
-                                onPressEdit={() =>
-                                    navigation.navigate("EditTask", {
+            <ScrollView>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={taskSearch}
+                    renderItem={({ item }) => {
+                        return (
+                            <View
+                                onPress={() =>
+                                    navigation.navigate("Login", {
                                         id: item.id,
                                         description: item.description,
                                         title: item.title,
                                         responsible: item.responsible,
-                                        status: item.status,
                                     })
                                 }
-                                onPressStatus={() => handleChangeStatus(item)}
-                            />
-                        </View>
-                    );
-                }}
-            />
+                            >
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        navigation.navigate("EditTask", {
+                                            id: item.id,
+                                            description: item.description,
+                                            title: item.title,
+                                            responsible: item.responsible,
+                                            status: item.status,
+                                        })
+                                    }
+                                >
+                                    <Task
+                                        title={item.title}
+                                        status={item.status}
+                                        description={item.description}
+                                        responsible={item.responsible}
+                                        onPressDelete={() => {
+                                            Popup.show({
+                                                type: "confirm",
+                                                iconEnabled: false,
+                                                title: "¿Estas seguro que quiere borrar esta tarea?",
+                                                textBody: `${item.title}`,
+                                                buttonText: "Borrar",
+                                                confirmButtonStyle: {
+                                                    backgroundColor:
+                                                        "rgba(183,56,254,0.4)",
+                                                },
+                                                confirmText: "Cancelar",
+                                                confirmButtonTextStyle: {
+                                                    color: "black",
+                                                },
+                                                background: "rgba(2,0,0,0.7)",
+                                                callback: () => {
+                                                    deleteTask(item.id);
+                                                    Popup.hide();
+                                                },
+                                            });
+                                        }}
+                                        onPressEdit={() =>
+                                            navigation.navigate("EditTask", {
+                                                id: item.id,
+                                                description: item.description,
+                                                title: item.title,
+                                                responsible: item.responsible,
+                                                status: item.status,
+                                            })
+                                        }
+                                        onPressStatus={() =>
+                                            handleChangeStatus(item)
+                                        }
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        );
+                    }}
+                />
+            </ScrollView>
 
             <TouchableOpacity
                 style={styles.buttonNewTask}

@@ -55,7 +55,7 @@ export default function AnimatedLoad() {
                     <Button
                         title="ENTRAR"
                         onPress={() => {
-                            showAd();
+                            // showAd();
                             setVisible(false);
                         }}
                         disabled={buttonDisable}

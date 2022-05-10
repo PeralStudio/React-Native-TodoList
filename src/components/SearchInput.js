@@ -26,9 +26,8 @@ const SearchInput = ({ valueSearch, onChangeTextSearch, taskFilter }) => {
                 <AdMobBanner
                     bannerSize="banner"
                     adUnitID="ca-app-pub-6203383529182342/1753513956"
-                    servePersonalizedAds={true}
                     onDidFailToReceiveAdWithError={(error) =>
-                        console.log(error)
+                        console.log("Admob error:", error)
                     }
                 />
             </View>

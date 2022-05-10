@@ -40,12 +40,12 @@ const Task = ({
                 </TouchableOpacity>
 
                 <View style={styles.taskActionsButtons}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={styles.buttonEdit}
                         onPress={onPressEdit}
                     >
                         <AntDesign name="form" size={20} color="#b738fe" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity
                         style={styles.buttonDelete}
